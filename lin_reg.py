@@ -73,6 +73,8 @@ print('Intercept: ', model.intercept_)
 print('Mean squared error(MSE): %.2f' % mean_squared_error(Y_test, Y_pred))
 print('Coeficient of determination (R^2): %.2f' % r2_score(Y_test, Y_pred))
 
-sns.scatterplot(Y_test, Y_pred, alpha = 0.5)
+
+
+sns.scatterplot(Y_test, Y_pred)
 
 print("pauza")
