@@ -80,3 +80,54 @@ print(mean_absolute_error(val_y, val_predictions))
 #random_state(Python) = set.seed(R)
 
 
+###
+#
+# OVERFITTING AND UNDERFITTING
+#
+# ###
+
+#make distinction
+
+from sklearn.metrics import mean_absolute_error
+from sklearn.tree import DecisionTreeRegressor
+###
+#
+# There are a few alternatives for controlling the tree depth,
+# and many allow for some routes through the tree to have greater depth than other routes.
+# But the max_leaf_nodes argument provides a very sensible way to control overfitting vs underfitting.
+# The more leaves we allow the model to make,
+# the more we move from the underfitting area in the above graph to the overfitting area.
+#
+###
+
+def get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y):
+    model = DecisionTreeRegressor(max_leaf_nodes=max_leaf_nodes, random_state=0)
+    model.fit(train_X, train_y)
+    preds_val = model.predict(val_X)
+    mae = mean_absolute_error(val_y, preds_val)
+    return(mae)
+
+# compare MAE with differing values of max_leaf_nodes
+for max_leaf_nodes in [5, 50, 500, 5000]:
+    my_mae = get_mae(max_leaf_nodes, train_X, val_X, train_y, val_y)
+    print("Max leaf nodes: %d  \t\t Mean Absolute Error:  %d" %(max_leaf_nodes, my_mae))
+
+###
+# CONCLUSION:
+# Overfitting: capturing spurious patterns that won't recur in the future, leading to less accurate predictions, or
+# Underfitting: failing to capture relevant patterns, again leading to less accurate predictions.
+###
+
+
+candidate_max_leaf_nodes = [5, 25, 50, 100, 250, 500]
+#sneaky written function
+scores = {leaf_size: get_mae(leaf_size, train_X, val_X, train_y, val_y) for leaf_size in candidate_max_leaf_nodes}
+
+best_tree_size = min(scores, key=scores.get)
+print(best_tree_size)
+
+# Fit the model with best_tree_size. Fill in argument to make optimal size
+final_model = DecisionTreeRegressor(max_leaf_nodes=best_tree_size, random_state=1)
+
+# fit the final model
+final_model.fit(X, y)
