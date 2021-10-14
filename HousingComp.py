@@ -16,5 +16,5 @@ print(train.shape)
 #prebrojavamo null vrednosti
 print(train.isnull().sum())
 
-print(sb.heatmap(train.isnull(),yticklabels=False, cbar = False))
-print('2')
+sb.heatmap(train.isnull(),yticklabels=False, cbar = False)
+print('s')
