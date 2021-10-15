@@ -4,20 +4,22 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_absolute_error
 import seaborn as sb
 
-housing_test_data_path = 'KaggleDatasets/test.csv'
+def sum_nullova_kolone():
+    brojac = 0
+    for x in col:
+        flag = train[x].isnull().values.any()
+        if flag == True:
+            print(x)
+            brojac = brojac + 1
+    print('Ima ' + str(brojac) + ' kolona sa nan vrednostima ')
+
 housing_train_data_path = 'KaggleDatasets/train.csv'
+housing_test_data_path = 'KaggleDatasets/test.csv'
 
-test = pd.read_csv(housing_test_data_path)
 train = pd.read_csv(housing_train_data_path)
-
-
-
+test = pd.read_csv(housing_test_data_path)
 
 col = train.columns
-print(col)
-
-
-
 
 #sredjujemo LotFrontage svaki koji ima null
 mean_lot_frontage = train['LotFrontage'].mean()
@@ -49,19 +51,39 @@ train['BsmtFinType1'] = train['BsmtFinType1'].fillna('NoB')
 #BsmtFinType2
 train['BsmtFinType2'] = train['BsmtFinType2'].fillna('NoB')
 
+#Electrical
+train = train.dropna(subset = ['Electrical'])
+
+#FireplaceQu
+train['FireplaceQu'] = train['FireplaceQu'].fillna('NF')
+
+#GarageType
+train['GarageType'] = train['GarageType'].fillna('NG')
+
+#GarageYrBlt
+train['GarageYrBlt'] = train['GarageYrBlt'].fillna(train['GarageYrBlt'].median())
+
+#GarageFinish
+train['GarageFinish'] = train['GarageFinish'].fillna('NG')
+
+#GarageQual
+train['GarageQual'] = train['GarageQual'].fillna('NG')
+
+#GarageCond
+train['GarageCond'] = train['GarageCond'].fillna('NG')
+
+#PoolQC
+train['PoolQC'] = train['PoolQC'].fillna('NP')\
+
+#Fence
+train['Fence'] = train['Fence'].fillna('NF')
+
+#MiscFeature - irrelevant - should remove it but don't know how xD
+train['MiscFeature'] = train['MiscFeature'].fillna('None')
 
 
-#prebrojavamo null vrednosti
-#print(train.isnull().sum())
-###
-#
-brojac = 0
-for x in col:
-    flag = train[x].isnull().values.any()
-    if flag == True:
-        print(x)
-        brojac = brojac + 1
-print('Ima ' + str(brojac) + ' kolona sa nan vrednostima ')
+sum_nullova_kolone()
+
 
 
 
